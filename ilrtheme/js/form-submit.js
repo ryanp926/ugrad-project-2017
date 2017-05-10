@@ -31,6 +31,7 @@
                     form.reset();
                 },
                 error: function() {
+                    
                     $.magnificPopup.open({
                         items: {
                             src: form.querySelector('.js-fr-error-form-submit'),
@@ -43,6 +44,7 @@
                 complete: function () {
                     submitting = false;
                 }
+            
             });
         }
 

@@ -101,11 +101,6 @@ blockquote {
   color: #2d2d2d
 }
 
-a {
-  text-decoration: underline;
-  color: inherit
-}
-
 .fr_button_border_black {
   font-family: Montserrat;
   text-align: center;
@@ -118,18 +113,18 @@ a {
   float: none;
   display: block;
   padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-bottom: 0rem;
   background-color: white
 }
 
 .fr_cnt03_column_grid_3 {
   float: none;
   display: block;
-  width: 90%;
+  width: 100%;
   vertical-align: top;
   margin-right: auto;
   margin-left: auto;
-  max-width: 1200px
+  max-width: 1080px;
 }
 
 .fr_cnt03_column_grid_3.fr-grid>.fr-widget {
@@ -160,10 +155,9 @@ a {
   float: none;
   display: block;
   margin-right: auto;
-  background-image: url(../images/thumbnail/landscape-meadow-mountains.jpg_1600x1008.jpg);
   background-position: left center;
   background-size: cover;
-  min-height: 25rem
+  min-height: 15rem
 }
 
 .fr_text_163 {
@@ -200,7 +194,7 @@ a {
   vertical-align: top;
   margin-right: auto;
   margin-left: auto;
-  max-width: 1200px
+  max-width: 1080px
 }
 
 .fr_cnt03_column_grid_5.fr-grid>.fr-widget {
@@ -231,7 +225,6 @@ a {
   float: none;
   display: block;
   margin-right: auto;
-  background-image: url(../images/thumbnail/landscape-meadow-mountains.jpg_1600x1008.jpg);
   background-position: left center;
   background-size: cover;
   min-height: 25rem
@@ -301,7 +294,6 @@ a {
   float: none;
   display: block;
   margin-right: auto;
-  background-image: url(../images/thumbnail/landscape-meadow-mountains.jpg_1600x1008.jpg);
   background-position: left center;
   background-size: cover;
   min-height: 25rem
@@ -383,6 +375,10 @@ a {
     margin-right: auto;
     margin-left: auto
   }
+
+  .create-event > a {
+    width: 5%;
+  }
 }
 
 .fr_text_206 {
@@ -422,3 +418,42 @@ a {
   padding-left: 20px;
   max-width: 300px
  }
+
+input[type=text] {
+    float: none;
+    width: 130px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+/* When the input field gets focus, change its width to 100% */
+input[type=text]:focus {
+    width: 75%;
+}
+
+hr.style18 { 
+  height: 30px;
+  width: 100%;
+  border-style: solid; 
+  border-color: #8c8b8b; 
+  border-width: 1px 0 0 0; 
+  border-radius: 20px; 
+} 
+hr.style18:before { 
+  display: block; 
+  content: ""; 
+  height: 30px; 
+  margin-top: -31px; 
+  border-style: solid; 
+  border-color: #8c8b8b; 
+  border-width: 0 0 1px 0; 
+  border-radius: 20px; 
+}
+
+.fr_cnt03_column_grid_5 a {
+  color: black;
+}
+
+.fr_cnt03_column_grid_5 a:hover {
+  color: #CD3030;
+}

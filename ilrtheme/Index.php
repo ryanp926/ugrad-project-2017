@@ -1,6 +1,6 @@
-<?php session_start(); include "db_v2.php"; ?>
+<?php include "db_v2.php"; ?>
 <?php get_header(); ?>
-     --><div id="hero_with_bg" class="fr-widget fr-container fr_hero_with_bg">
+        <div id="hero_with_bg" class="fr-widget fr-container fr_hero_with_bg">
             <div id="hd3_content" class="fr-widget fr-container fr_hd3_content">
                 <div id="text_25" class="fr-widget fr-text fr-wf fr_text_bright_left fr_text_25">
                     <div class="fr-text">
@@ -8,8 +8,6 @@
                         <p>Everything you need to know going on within your community.</p>
                     </div>
                 </div>
-            </div><!--
-         --><div id="input_5" class="fr-widget fr-input fr-wf fr_input_5"> <input type="text" class="fr_input_5" placeholder="Search..." name="FNAME">
             </div>
         </div><!--
      --><div id="gallery_3" class="fr-widget fr-container fr_gallery_3">
@@ -58,57 +56,69 @@
                 </div>
             </div>
         </div>
-
         <div class="container">
             <?php
+                // get time zone, current month, and current year
                 date_default_timezone_set('America/Los_Angeles');
-                $startDate = date('m-d-Y');
-                $endDate = date('m-t-Y');
+                $currentYear = date('Y');
+                $startDate = date('m') . "-01-" . $currentYear;
+                $endDate = "12-31-" . $currentYear;
 
-                $result = getEventDateRange($startDate, $endDate);
+                // print featured events from current month to end of year. Max 10 returned
+                $result = getPosterBoardEvents($startDate, $endDate);
 
-                for( $i = 1; $i < $result->num_rows+1; $i++ ){
-                    $row = $result->fetch_assoc();
+                if( $result )
+                {
+                    for( $i = 0; $i < $result->num_rows; $i++ )
+                    {    
+                        $row = $result->fetch_assoc();
 
-                    $dateObj   = DateTime::createFromFormat('m-d-Y h:i A', $row["start_date_time"]);
-                    $dateDisplay = $dateObj->format('M d'); 
+                        // retrieve images array
+                        $images = unserialize( base64_decode( $row["imageurl"] ) );	
 
-                    if( $row != 0 ){
-                         echo 
-                         '<div class="fr-text fr-widget-hover-opacity-60 panel">' .
-                            '<a href="/wp-content/themes/ilrtheme/search.php?id=' . $row["id"] . '">' .
-                                '<h2>' . $dateDisplay . '</h2>' .
-                                '<h2>' . $row["title"] . '</h2>' .
-                            '</a>' .
-                         '</div>';
-                         $_SESSION["title"] = $row["title"];
+                        $dateObj   = DateTime::createFromFormat('m-d-Y h:i A', $row["start_date_time"]);
+                        $dateDisplay = $dateObj->format('M d');
+
+                        if ($row["feature"] == 1)
+                        {
+                            echo 
+                                '<div class="fr-text fr-widget-hover-opacity-60 panel">' .
+                                    '<a href="/wp-content/themes/ilrtheme/search.php?id=' . $row["id"] . '">' .
+                                    '<img src="http://' . $images[0] . '" alt="ilovereno.com" height="100%" width="100%">' .
+                                        '<h2>' . stripslashes($dateDisplay) . '</h2>' .
+                                        '<h2>' . stripslashes($row["title"]) . '</h2>' .
+                                    '</a>' .
+                                '</div>';
+                        }
+                    }
+                }
+                // print non-featured events
+                $result = getPosterBoardEvents($startDate, $endDate);
+                if( $result )
+                {
+                    while($row = $result->fetch_assoc())
+                    {
+                        // retrieve images array
+                        $images = unserialize( base64_decode( $row["imageurl"] ) );
+
+                        $dateObj   = DateTime::createFromFormat('m-d-Y h:i A', $row["start_date_time"]);
+                        $dateDisplay = $dateObj->format('M d');
+
+                        if ($row["feature"] == 0)
+                        {
+                            echo 
+                                '<div class="fr-text fr-widget-hover-opacity-60 panel">' .
+                                    '<a href="/wp-content/themes/ilrtheme/search.php?id=' . $row["id"] . '">' .
+                                    '<img src="http://' . $images[0] . '" alt="ilovereno.com" height="100%" width="100%">' .
+                                        '<h2>' . stripslashes($dateDisplay) . '</h2>' .
+                                        '<h2>' . stripslashes($row["title"]) . '</h2>' .
+                                    '</a>' .
+                                '</div>';
+                        }
                     }
                 }
             ?>
         </div>
-
-<!--
-        <div id="gallery_5" class="fr-widget fr-container fr_gallery_5">
-            <div id="gry2_column_images" class="fr-widget fr-grid fr_gry2_column_images">
-                <div id="gry2_image_one" class="fr-widget fr-container fr_gry2_image_one fr-widget-hover-opacity-60">
-                </div>
-                <div id="gry2_image_two" class="fr-widget fr-container fr_gry2_image_two fr-widget-hover-opacity-60">
-                </div>
-                <div id="gry2_image_three" class="fr-widget fr-container fr_gry2_image_three fr-widget-hover-opacity-60">
-                </div>
-                <div id="gry2_image_four" class="fr-widget fr-container fr_gry2_image_four fr-widget-hover-opacity-60">
-                </div>
-                <div id="gry2_image_five" class="fr-widget fr-container fr_gry2_image_five fr-widget-hover-opacity-60">
-                </div>
-                <div id="gry2_image_six" class="fr-widget fr-container fr_gry2_image_six fr-widget-hover-opacity-60">
-                </div>
-                <div id="gry2_image_seven" class="fr-widget fr-container fr_gry2_image_seven fr-widget-hover-opacity-60">
-                </div>
-                <div id="gry2_image_eight" class="fr-widget fr-container fr_gry2_image_eight fr-widget-hover-opacity-60">
-                </div>
-            </div>
-        </div>
--->
     <?php if ( have_posts() ) : ?>
     <?php while ( have_posts() ) : the_post(); ?>
       <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>

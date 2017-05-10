@@ -1,4 +1,4 @@
-<?php
+<?php include '../../../wp-load.php';
 // Globale variables //////////////////////////////////////////////////////////
 
   // Create a database connection
@@ -36,7 +36,15 @@
       echo "Success! Subsciber added to ilr_subscriber DB.";
     } else {
       // Failure
-      die("Database query failed. " . mysqli_error($connection));
+      die("Database ilr_subscriber query failed. " . mysqli_error($connection));
+    }
+
+    if ($result) {
+      // Success
+      echo "Success! Subsciber added to wp_es_emaillist DB.";
+    } else {
+      // Failure
+      die("Database wp_es_emaillist query failed. " . mysqli_error($connection));
     }
 
     // close db connection
@@ -140,17 +148,54 @@
   //   FORMATTING:
   //   start date and time --> 02-05-2017 01:30PM
   //   end date and time --> 02-05-2017 01:30PM
+
+  function  addTags( $eventsID, $nonprofit, $fundraiser, $familyfriendly, $festival, $cause, 
+      $foodanddrink, $entertainment, $tedtalks, $beauty, $health, $neighborhood, $holiday,
+      $grandopening, $laketahoe, $outdoor, $sports, $tradeshow, $happyhour, $foodtrucks, $education, $crawl )
+
+       {
+
+    global $dbhost, $dbuser, $dbpass, $dbname;
+
+    $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+     $query  = "INSERT INTO ilr_tags (";
+     $query .= " id, nonprofit, fundraiser, familyfriendly, festival, cause,
+       foodanddrink, entertainment, tedtalks, beauty, health, neighborhood, holiday, grandopening, 
+       laketahoe, outdoor, sports, tradeshow, happyhour, foodtrucks, education, crawl ";
+     $query .= ") VALUES (";
+     $query .= " '{$eventsID}', '{$nonprofit}' , '{$fundraiser}', '{$familyfriendly}' , '{$festival}', '{$cause}',
+       '{$foodanddrink}', '{$entertainment}' , '{$tedtalks}', '{$beauty}', '{$health}', '{$neighborhood}', '{$holiday}', '{$grandopening}', 
+       '{$laketahoe}', '{$outdoor}', '{$sports}', '{$tradeshow}', '{$happyhour}', '{$foodtrucks}', '{$education}', '{$crawl}' )";
+
+    $result = mysqli_query($connection, $query );
+
+    if ($result) {
+      // Success
+      echo "Success! Tags added to ilr_tags DB.";
+    } else {
+      // Failure
+      die("Database query failed. " . mysqli_error($connection));
+    }
+
+    // close db connection
+    mysqli_close($connection);
+
+  }
+
+
   function addEvent( $title, $start_date_time, $end_date_time, 
-                      $location, $description, $phone, $email )
+                      $location, $description, $phone, $email, $mytext, $url, $approved )
   {
     global $dbhost, $dbuser, $dbpass, $dbname;
+
     $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
     $query  = "INSERT INTO ilr_events (";
     $query .= " title, start_date_time, end_date_time, location, ";
-    $query .= "description, phone, email";
+    $query .= "description, phone, email, externallinks, imageurl, approved";
     $query .= ") VALUES (";
     $query .= " '{$title}', '{$start_date_time}', '{$end_date_time}', ";
-    $query .= " '{$location}', '{$description}', '{$phone}', '{$email}' ";
+    $query .= " '{$location}', '{$description}', '{$phone}', '{$email}', '{$mytext}', '{$url}', '{$approved}' ";
     $query .= ")";
     $result = mysqli_query($connection, $query );
 
@@ -162,8 +207,14 @@
       die("Database query failed. " . mysqli_error($connection));
     }
 
+   $id = mysqli_insert_id( $connection );
+
+
     // close db connection
     mysqli_close($connection);
+
+
+    return $id;
 }
 
 // FUNCTION TO DELETE ONE EVENT FROM TABLE ////////////////////////////////////
@@ -223,6 +274,199 @@
     return 0;
   }
 
+// FUNCTION TO ADD ONE BUSINESS ////////////////////////////////////////////////
+  //   approved DEFAULTED TO 0 -> unapproved
+  //   premium DEFAULTED TO 0 -> not premium
+  //   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  //   fullname VARCHAR(60) NULL,
+  //   email VARCHAR(60) NULL,
+  //   businessname VARCHAR(60) NULL,
+  //   phone VARCHAR(30) NULL,
+  //   address VARCHAR(30) NULL,
+  //   city VARCHAR(30) NULL,
+  //   state VARCHAR(30) NULL,
+  //   zip VARCHAR(15) NULL,
+  //   website VARCHAR(60) NULL,
+  //   type VARCHAR(60) NULL,
+  //   description VARCHAR(60) NULL,
+  //   wifi INT 10 NULL,
+  //   wchair INT 10 NULL,
+  //   imageurl VARCHAR(255) NULL
+  //
+  function addBusiness( $name,
+                        $email,
+                        $business,
+                        $phone,
+                        $address,
+                        $city,
+                        $state,
+                        $zip,
+                        $website,
+                        $type,
+                        $description,
+                        $wifi, 
+                        $chair, 
+                        $urls,
+                        $approved )
+  {
+    // db connection parameters
+    global $dbhost, $dbuser, $dbpass, $dbname;
+
+    $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+    //inserting into subscriber table with results
+    $sql  = "INSERT INTO ilr_business ";
+    $sql .= "( fullname, email, businessname, phone, address, city, ";
+    $sql .= "state, zip, website, type, description, wifi, wchair, imageurl, approved)";
+    $sql .= " VALUES ( '{$name}', '{$email}', '{$business}', '{$phone}',";
+    $sql .= " '{$address}', '{$city}', '{$state}', '{$zip}','{$website}',";
+    $sql .= " '{$type}', '{$description}' , '{$wifi}', '{$chair}',  '{$urls}', '{$approved}')";
+
+    // make query and store results
+    $result = mysqli_query( $connection, $sql );
+
+    //test and report successful insertion into DB
+    if( $result )
+    {
+      // Success
+      echo "Success! Subsciber added to ilr_business DB.";
+
+      // return event record id
+      $last_id = mysqli_insert_id($connection);
+      return $last_id;
+    } 
+    else
+    {
+      // Failure
+      die("Database query failed. " . mysqli_error($connection));
+    }
+
+    // close db connection
+    mysqli_close($connection);
+}
+// FUNCTION TO INSERT ALL BUSINESS TYPES INTO TABLE BASED ON BUSINESS ID ///////
+function addBusinessType( $id,
+                          $banking,
+                          $food,
+                          $coffee,
+                          $recreation,
+                          $family,
+                          $nonprofit,
+                          $other )
+{
+  // Create a database connection
+  global $dbhost, $dbuser, $dbpass, $dbname;
+
+  // make db connection, query for business record, and return result
+  $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+  $query  = "INSERT INTO ilr_business_type ( id, banking, food, coffee,";
+  $query .= " recreation, family, nonprofit, other ";
+  $query .= ") VALUES ( '{$id}', '{$banking}', '{$food}', '{$coffee}',";
+  $query .= " '{$recreation}', '{$family}', '{$nonprofit}', '{$other}' )";
+
+  $result = mysqli_query( $connection, $query );
+
+  if( $result )
+  {
+    return 1;
+  }
+
+  // close db connection
+  mysqli_close($connection);
+  return 0;
+}
+// FUNCTION TO ALL BUSINESSES //////////////////////////////////////////////////
+  function getAllBusiness()
+  {
+    global $dbhost, $dbuser, $dbpass, $dbname;
+
+    $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+    $query  = "SELECT * ";
+    $query .= "FROM ilr_business ";
+    $result = mysqli_query($connection, $query);
+
+    if( $result )
+    {
+      return $result;
+    }
+
+    // close db connection
+    mysqli_close($connection);
+    return 0;
+  }
+// FUNCTION TO FIND ONE BUSINESS IN TABLE //////////////////////////////////////
+  function findBusiness( $id )
+  {
+    // Create a database connection
+    global $dbhost, $dbuser, $dbpass, $dbname;
+    
+    $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+    $query = "SELECT * from ilr_business WHERE id = $id AND approved=1";
+    $result = mysqli_query( $connection, $query );
+
+    if( $result )
+    {
+      if ($result->num_rows > 0)
+      {
+        return $result->fetch_assoc();
+      }
+    }
+    else {echo "DID NOT FIND Business";}
+    
+    // close db connection
+    mysqli_close($connection);
+
+    return 0;
+  }
+
+// FUNCTION TO SHOW ALL BUSINESSES IN ilr_business TABLE ///////////////////////
+  function showAllBusiness(){
+    global $dbhost, $dbuser, $dbpass, $dbname;
+
+    $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+    //MySQL query to select all events in table
+    $query  = "SELECT * ";
+    $query .= "FROM ilr_business ";
+    $result = mysqli_query($connection, $query);
+
+    // select all data in event record, query table, store results
+    $sql  = "SELECT id, fullname, email, businessname, phone, address, city, state, zip, website, type, ";
+    $sql .= "description, wifi, wchair FROM ilr_business";
+    $result = $connection->query($sql);
+
+    // loop through all events found and output to page
+    if ($result->num_rows > 0) {
+      // output data of each row
+      while($row = $result->fetch_assoc()) {
+        echo  "<br> ID: ". $row["id"]. " |".
+              " Rep's Name: ". $row["fullname"]. " ". " |".
+               " Email: ". $row["email"]. " ". " |".
+               " Business Name: ". $row["businessname"]. " ". " |".
+               " Phone: ". $row["phone"]. " ". " |".
+               " Address: ". $row["address"]. " ". " |". 
+               " City: ". $row["city"]. " ". " |<br>".
+               " State: ". $row["state"]. " ". " |".
+               " Zip: ". $row["zip"]. " ". " |".
+               " Website: ". $row["website"]. " ". " |".
+               " Type of Business: ". $row["type"]. " ". " |".
+               " Description: ". $row["description"]. " ". " |". 
+               " WIFI: ". $row["wifi"]. " ". " |".
+               " Wheelchair Accessible: ". $row["wchair"]. " ". " |".
+               "<br>";
+       }
+    }
+    else 
+    {
+      echo "0 events";
+    }
+    // close db connection
+    mysqli_close($connection);
+  }
+
 // FUNCTION TO SHOW ALL RECORD IN ilr_events TABLE ////////////////////////////
   function showAllEvents()
   {
@@ -233,17 +477,23 @@
     //MySQL query to select all events in table
     $query  = "SELECT * ";
     $query .= "FROM ilr_events ";
-    $result = mysqli_query($connection, $query);
+    $result = mysqli_query( $connection, $query );
 
     // select all data in event record, query table, store results
     $sql  = "SELECT id, title, start_date_time, end_date_time, location,";
-    $sql .= " description, phone, email FROM ilr_events";
-    $result = $connection->query($sql);
+    $sql .= " description, phone, email, externallinks, imageurl, feature, tags FROM ilr_events";
 
-    // loop through all events found and output to page
-    if ($result->num_rows > 0) {
+    // // option to display all events by date in ascending order
+    //$result = $connection->query($sql);
+    //$sql= "SELECT * FROM ilr_events ORDER BY start_date_time ASC";
+
+    $result = mysqli_query( $connection, $sql );
+
+    if( $result->num_rows > 0 )
+    {
       // output data of each row
-      while($row = $result->fetch_assoc()) {
+      while( $row = $result->fetch_assoc() )
+      {
         echo  "<br> ID: ". $row["id"].
               " Title: ". $row["title"]. " ". 
                " Start Time: ". $row["start_date_time"]. " ".
@@ -251,35 +501,152 @@
                " Location: ". $row["location"]. " ".
                " Description: ". $row["description"]. " ".
                " Phone: ". $row["phone"]. " ".
-               " Email: ". $row["email"]. " ". "<br>";
+               " Email: ". $row["email"]. " ".
+               " External Links: ". $row["externallinks"]. " ".
+               " URL: ". $row["imageurl"].  " ".
+               " Feature: " . $row["feature"]. " " .
+               " Tags : " . $row["tags"]. "<br>";
        }
     }
     else 
     {
       echo "0 events";
     }
+
     // close db connection
     mysqli_close($connection);
   }
-// FUNCTION TO SELECT EVENTS WITHIN DATE RANGE ////////////////////////////////
-  function getEventDateRange( $being, $end )
+
+// FUNCTION TO SELECT EVENTS WITH THE RESPECTIVE TAG //////////////////////////
+  function getEventsByTag( $tag )
   {
-    //echo $startFrom, $startStop, $endFrom, $endStop;
+    global $dbhost, $dbuser, $dbpass, $dbname;
+    $array = array();
+    $connection = mysqli_connect( $dbhost, $dbuser, $dbpass, $dbname );
+
+    $index = 0;
+
+    $sql = "SELECT * from ilr_tags";
+
+    $result = mysqli_query($connection, $sql);
+
+    if( ($result->num_rows ) > 0 )
+    {
+      while( $row = $result->fetch_assoc() )
+      {
+        if( $row[$tag] == 1 )
+        {
+          $array[ $index ] = $row["id"];
+          $index++;
+        }
+      }
+    }
+
+    if( $index > 0 )
+    {
+      $sql = 'SELECT * FROM ilr_events WHERE approved=1 AND id IN (' . implode(',', array_map('intval', $array)) . ')';
+
+      $result = mysqli_query($connection, $sql);
+
+      if( $result->num_rows > 0 )
+      {
+        return $result;
+      }
+    }
+
+    return 0;
+    // close db connection
+  }
+// FUNCTION TO SELECT EVENTS WITHIN DATE RANGE ////////////////////////////////
+  function getEventDateRange( $begin, $end )
+  {
     global $dbhost, $dbuser, $dbpass, $dbname;
 
     $connection = mysqli_connect( $dbhost, $dbuser, $dbpass, $dbname );
 
-    $sql = "SELECT * FROM ilr_events WHERE start_date_time BETWEEN '" . $begin . "' AND '" . $end . "'";
-    $result = $connection->query( $sql );
+    $sql  = "SELECT * FROM ilr_events WHERE start_date_time BETWEEN '" . $begin;
+    $sql .= "' and '" . $end . "' AND approved=1 ORDER BY start_date_time ASC";
+    $result = mysqli_query($connection, $sql);
 
-    if($result->num_rows > 0)
+    if( ( $result->num_rows ) > 0 )
         return $result;
-    else 
-      echo "0 events";
 
     // close db connection
     mysqli_close( $connection );
     return 0;
+  }
+// FUNCTION TO SELECT EVENTS WITHIN DATE RANGE ////////////////////////////////
+  function getPosterBoardEvents( $begin, $end )
+  {
+    global $dbhost, $dbuser, $dbpass, $dbname;
+
+    $connection = mysqli_connect( $dbhost, $dbuser, $dbpass, $dbname );
+
+    $sql  = "SELECT * FROM ilr_events WHERE start_date_time BETWEEN '" . $begin;
+    $sql .= "' and '" . $end . "' AND approved=1 ORDER BY start_date_time ASC limit 10";
+    $result = mysqli_query($connection, $sql);
+
+    if( ( $result->num_rows ) > 0 )
+        return $result;
+
+    // close db connection
+    mysqli_close( $connection );
+    return 0;
+  }
+// FUNCTION TO SELECT ALL BUSINESSES ///////////////////////////////////////////
+  function getAllBusinesses()
+  {
+    global $dbhost, $dbuser, $dbpass, $dbname;
+
+    $connection = mysqli_connect( $dbhost, $dbuser, $dbpass, $dbname );
+
+    $sql  = "SELECT * FROM ilr_business WHERE approved=1";
+    $result = mysqli_query($connection, $sql);
+
+    // close db connection
+    mysqli_close( $connection );
+    return $result;
+  }
+// FUNCTION TO SELECT ALL BUSINESSES WITH RESPECIVE TAG ////////////////////////
+  function getBusinessesByType( $type )
+  {
+    global $dbhost, $dbuser, $dbpass, $dbname;
+    $array = array();
+    $connection = mysqli_connect( $dbhost, $dbuser, $dbpass, $dbname );
+
+    $index = 0;
+
+    $sql = "SELECT * from ilr_business_type ";
+
+    $result = mysqli_query($connection, $sql);
+
+    if( ($result->num_rows ) > 0 )
+    {
+      while( $row = $result->fetch_assoc() )
+      {
+        if( $row[$type] == 1 )
+        {
+          $array[ $index ] = $row["id"];
+          $index++;
+        }
+      }
+    }
+
+    if( $index > 0 )
+    {
+      $sql = 'SELECT * FROM ilr_business WHERE id IN (' . implode(',', array_map('intval', $array)) . ')';
+
+      $result = mysqli_query($connection, $sql);
+
+      if( $result->num_rows > 0 )
+      {
+        return $result;
+      }
+    }
+
+    return 0;
+    // close db connection
+    mysqli_close($connection);
   }
 // CREATE SUBSCRIBER TABLE ////////////////////////////////////////////////////
 /*
@@ -347,8 +714,44 @@
   }
   echo "ilr_events table deleted successfully\n";
 */
-?>
-<?php
+// CREATE EVENTS TAG TABLE ////////////////////////////////////////////////////
+/*    $sql = "CREATE TABLE ilr_tags (
+             id INT UNSIGNED NOT NULL PRIMARY KEY, 
+             nonprofit TINYINT(1) DEFAULT '0',
+             fundraiser TINYINT(1) DEFAULT '0',
+             tedtalks TINYINT(1) DEFAULT '0',
+             sports TINYINT(1) DEFAULT '0',
+             beauty TINYINT(1) DEFAULT '0',
+             tradeshow TINYINT(1) DEFAULT '0',
+             familyfriendly TINYINT(1) DEFAULT '0',
+             health TINYINT(1) DEFAULT '0',
+             happyhour TINYINT(1) DEFAULT '0',
+             festival TINYINT(1) DEFAULT '0',
+             neighborhood TINYINT(1) DEFAULT '0',
+             foodtrucks TINYINT(1) DEFAULT '0',
+             cause TINYINT(1) DEFAULT '0',
+             holiday TINYINT(1) DEFAULT '0',
+             education TINYINT(1) DEFAULT '0',
+             foodanddrink TINYINT(1) DEFAULT '0',
+             grandopening TINYINT(1) DEFAULT '0',
+             crawl TINYINT(1) DEFAULT '0',
+             entertainment TINYINT(1) DEFAULT '0',
+             laketahoe TINYINT(1) DEFAULT '0',
+             outdoor TINYINT(1) DEFAULT '0',
+             other TINYINT(1) DEFAULT '1' )";
+*/
+// CREATE BUSINESS TYPE TABLE /////////////////////////////////////////////////
+/*
+    $sql = "CREATE TABLE ilr_business_type (
+            id INT UNSIGNED NOT NULL PRIMARY KEY, 
+            banking TINYINT(1) DEFAULT '0',
+            food TINYINT(1) DEFAULT '0',
+            coffee TINYINT(1) DEFAULT '0',
+            recreation TINYINT(1) DEFAULT '0',
+            family TINYINT(1) DEFAULT '0',
+            nonprofit TINYINT(1) DEFAULT '0',
+            other TINYINT(1) DEFAULT '1' )";
+*/
 // TESTING CODE FROM INITIAL IMPLEMENTATION ///////////////////////////////////
 /*
   // Subscriber insert test 1
@@ -399,18 +802,6 @@
 
 // END PHP SECTION ////////////////////////////////////////////////////////////
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-
-<html lang="en">
-	<head>
-		<title>Databases</title>
-	</head>
-	<body>
-
-
-	</body>
-</html>
 <?php
   // 5. Close database connection
   mysqli_close($connection);

@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
     <title>I Love Reno</title>
     <meta name="DC.title" content="I Love Reno">
     <meta property="og:title" content="I Love Reno">
@@ -13,9 +12,12 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="I Love Reno">
     <meta name="DC.language" scheme="ISO639-1" content="en">
+    <link rel="shortcut icon" href="/wp-content/themes/ilrtheme/images/thumbnail/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/wp-content/themes/ilrtheme/css/base.css" />
     <link rel="stylesheet" type="text/css" href="/wp-content/themes/ilrtheme/style.css"/>
     <link rel="stylesheet" type="text/css" href="/wp-content/themes/ilrtheme/posterboard.css"/> 
+    <link rel="stylesheet" href="/wp-content/themes/ilrtheme/css/font-awesome.min.css">
+    <script type="text/javascript" src="/wp-content/themes/ilrtheme/vendor/jquery.min.js"></script>
     <script type="text/javascript">
         var fonts = {
             "Montserrat": {
@@ -60,16 +62,20 @@
     </script>
     <script type="text/javascript" src="/wp-content/themes/ilrtheme/vendor/webfontloader.js"></script>
     <script type="text/javascript" src="/wp-content/themes/ilrtheme/js/fontloader.js"></script>
+    <script type="text/javascript" src="/wp-content/themes/ilrtheme/js/responsive-nav.js"></script>
+    <script type="text/javascript" src="/wp-content/themes/ilrtheme/js/page-script.js"></script>
+
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 
-<body>
-    <div class="b-content hide-footer">
+    <div class="b-content hide-footer"> 
+        <!-- NAVIGATION BAR -->
         <div id="nav_with_text_logo" class="fr-widget fr-container fr_nav_with_text_logo">
             <div id="navigation_dark_with_brand_name_2" class="fr-widget fr-navigation fr-navigation-active fr_navigation_dark_with_brand_name_2">
-                <a id="brand_name_2" class="fr-widget fr-text fr-wf fr_nav_logo_text fr_brand_name_2 fr-link" href="http://localhost:8888">
-                    <div class="fr-text">I Love&nbsp;Reno</div>
+                <a id="brand_name_2" class="fr_brand_name_2" href="">
+                    <div style="color: white;"><i style="color: red; font-size: 24px;" class="fa fa-heart"></i>&nbsp;&nbsp;I Love Reno</div>
                 </a><!--
              --><div id="mobile_toggle_3" class="fr-widget fr-navigation-toggle fr_mobile_toggle_3">
                     <div id="hamburger_icon_6" class="fr-widget fr-svg fr_hamburger_icon_6">
@@ -79,18 +85,15 @@
                     </div>
                 </div><!--
              --><div id="items_3" class="fr-widget fr-container fr_items_3">
-                    <a id="text01_3" class="fr-widget fr-text fr-wf fr_nav_item_bright_right_center fr_text01_3 fr-link" href="wp-content/themes/ilrtheme/events.php">
+                    <a id="text01_3" class="fr-widget fr-text fr-wf fr_nav_item_bright_right_center fr_text01_3 fr-link" href="/wp-content/themes/ilrtheme/events.php">
                         <div class="fr-text">Events</div>
                     </a><!--
-                 --><a id="text02_3" class="fr-widget fr-text fr-wf fr_nav_item_bright_right_center fr_text02_3 fr-link">
+                 --><a id="text02_3" class="fr-widget fr-text fr-wf fr_nav_item_bright_right_center fr_text02_3 fr-link" href="/wp-content/themes/ilrtheme/comingSoon.php">
                         <div class="fr-text">Explore</div>
                     </a><!--
-                 --><a id="text03_3" class="fr-widget fr-text fr-wf fr_nav_item_bright_right_center fr_text03_3 fr-link">
-                        <div class="fr-text">Community</div>
-                    </a><!--
-                 --><a id="sign_up_button_3" class="fr-widget fr-text fr-wf fr_button-1 fr_sign_up_button_3 fr-link" href="/wp-content/themes/ilrtheme/subscribe.php">
+                 --><a id="sign_up_button_3" class="fr-widget fr-text fr-wf fr_button-1 fr_sign_up_button_3 fr-link" href="/wp-content/themes/ilrtheme/subscribe.php" target="_blank">
                         <div class="fr-text">Sign up</div>
                     </a>
                 </div>
             </div>
-        </div><!--
+        </div>

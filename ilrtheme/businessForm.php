@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/wp-content/themes/ilrtheme/images/thumbnail/favicon.ico" />
     <title>Business Profile</title>
     <link rel="stylesheet" type="text/css" href="/wp-content/themes/ilrtheme/css/base.css">
     <link rel="stylesheet" type="text/css" href="/wp-content/themes/ilrtheme/css/subscribe.css">
@@ -74,39 +75,40 @@
                 </div>
             </div><!--
          --><div id="input_6" class="fr-widget fr-input fr-wf fr_input_6"> 
-         		<input type="text" required class="fr_input_6" placeholder="Rep's First and Last name (required)" name="rep-name">
+                <input type="text"  class="fr_input_6" placeholder="Rep's First and Last name (required)" required name="repname">
             </div>
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input required type="email" class="fr_input_11" placeholder="Business email (required)" name="business-email">
+                <input type="email" class="fr_input_11" placeholder="Business email (required)" required name="businessemail">
             </div>
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input required type="text" class="fr_input_11" placeholder="Name of your business (required)" name="business-name">
+                <input  type="text" class="fr_input_11" placeholder="Name of your business (required)" required name="businessname">
             </div>
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input required type="phone" class="fr_input_11" placeholder="Business phone number (required)" name="business-phone">
+                <input  type="phone" class="fr_input_11" placeholder="Business phone number (required)" required name="businessphone">
             </div>
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input required type="text" class="fr_input_11" placeholder="Business address (required)" name="business-address">    
+                <input  type="text" class="fr_input_11" placeholder="Business address (required)" required name="businessaddress">    
             </div>
 
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input required type="text" class="fr_input_11" placeholder="City (required)" name="business-city">
+                <input  type="text" class="fr_input_11" placeholder="City (required)" required name="businesscity">
             </div>
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input required type="text" class="fr_input_11" placeholder="State/Province/Region (required)" name="business-state">
+                <input  type="text" class="fr_input_11" placeholder="State/Province/Region (required)" required name="businessstate">
             </div>
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input required type="text" class="fr_input_11" placeholder="ZIP/Postal Code (required)" name="business-zipcode">
+                <input  type="text" class="fr_input_11" placeholder="ZIP/Postal Code (required)" required name="businesszipcode">
             </div>
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input type="text" class="fr_input_11" placeholder="Website" name="business-website">
+                <input type="text" class="fr_input_11" placeholder="Website" required name="businesswebsite">
             </div>
             <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> 
-            	<input type="text" class="fr_input_11" placeholder="Type of business e.g. restaurant & bar, beauty salon, dental office" name="business-type">
+                <input type="text" class="fr_input_11" placeholder="Type of business e.g. retail, food, etc." required name="businesstype">
             </div>
-            <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> <textarea type="text" required class="fr_input_11" placeholder="Description of business (required)" name="business-description"></textarea>
+            <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11"> <textarea type="text" required class="fr_input_11" placeholder="Description of business (required)" name="businessdescription"></textarea>
             </div>
-            <div style="float: none;
+
+            <div class="business-accessibility" style="float: none;
               width: 90%;
               font-family: Roboto;
               font-weight: 300;
@@ -114,12 +116,15 @@
               margin-right: auto;
               margin-left: auto;
               max-width: 400px;
+              padding-top: 20px;
               color: white;">
-                <p style="color: white;">Wi-Fi Available for Customers? *</p>
-                <input class="fr_input_11" type="radio" name="business-wifi" value="yes"> Yes<br>
-                <input class="fr_input_11" type="radio" name="business-wifi" value="no"> No
+                <legend>Accessibility: </legend>
+                <br/>
+                <input type="checkbox" name="businesswifi" value="yes"> Wifi
+                <input type="checkbox" name="businesswheelchair" value="yes"> Wheel chair access
             </div>
-            <div style="float: none;
+
+            <div class="business-type" style="float: none;
               width: 90%;
               font-family: Roboto;
               font-weight: 300;
@@ -127,11 +132,27 @@
               margin-right: auto;
               margin-left: auto;
               max-width: 400px;
+              padding-top: 20px;
               color: white;">
-                <p style="color: white;">Wheelchair Accessible? *</p>
-                <input class="fr_input_11" type="radio" name="business-wheelchair" value="yes"> Yes<br>
-                <input class="fr_input_11" type="radio" name="business-wheelchair" value="no"> No
+                <legend class="fr-text">Type of Buiness: </legend>
+                <br/>   
+                <input type="checkbox" name="banking" value="1" > Banking
+                <input type="checkbox" name="food" value="1"> Food
+                <!-- <input type="checkbox" name="retail" > Retail -->
+                <input type="checkbox" name="coffee" value="1" > Coffee <br/>
+                <input type="checkbox" name="recreation" value="1" > Recreation
+                <input type="checkbox" name="family" value="1" > Family
+                <input type="checkbox" name="nonprofit" value="1" > Non-Profit
+                <input type="checkbox" name="other" value="1" > Other
             </div>
+
+            <!-- IMAGES UPLOAD -->
+            <div id="input_11" class="fr-widget fr-input fr-wf fr_input_11 form-wrap">
+                <p style="color: white">Upload Images (optional)</p>
+                <input style="color:white" name="theFile[]" type="file" multiple="multiple">
+                <p style="color:red">*Please wait while files upload. Message will display once completed.</p>
+            </div>
+
             <!--
          --><a id="text_80" class="fr-widget fr-text fr-wf fr_button fr_text_80 fr-link fr-linktype-submit" tabindex="0">
                 <div class="fr-text">Submit</div>

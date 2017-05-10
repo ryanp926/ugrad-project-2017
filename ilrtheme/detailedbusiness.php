@@ -6,16 +6,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="/wp-content/themes/ilrtheme/images/thumbnail/favicon.ico" />
     <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-    <title>Detailed Events</title>
-    <meta name="DC.title" content="Detailed Business">
-    <meta property="og:title" content="Detailed Business">
-    <meta name="twitter:title" content="Detailed Business">
+    <link rel="shortcut icon" href="/wp-content/themes/ilrtheme/images/thumbnail/favicon.ico" />
+    <title>Detailed Business</title>
+    <meta name="DC.title" content="Detailed Events">
+    <meta property="og:title" content="Detailed Events">
+    <meta name="twitter:title" content="Detailed Events">
     <meta property="og:image" content="images/froont.png">
     <meta name="twitter:image" content="images/froont.png">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Detailed Business">
+    <meta property="og:site_name" content="Detailed Events">
     <meta name="DC.language" scheme="ISO639-1" content="en"> 
     <script type="text/javascript" src="vendor/jquery.min.js"></script> 
     <!-- Latest compiled and minified CSS -->
@@ -26,6 +26,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> 
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
     <script type="text/javascript" src="vendor/noframework.waypoints.min.js"></script>
     <script type="text/javascript" src="vendor/jquery.magnific-popup.min.js"></script>
     <script type="text/javascript" src="js/responsive-nav.js"></script>
@@ -82,6 +83,7 @@
     <script type="text/javascript" src="js/fontloader.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- STYLING FOR THE IMAGE CAROUSEL -->
     <style type="text/css">
 
@@ -90,7 +92,6 @@
             width: 720px;
             height: 450px;
         }
-
 
         .carousel-inner > .item > img {
           display: block;
@@ -150,7 +151,7 @@
             <?php
                 // find event id from URL and output information
                 $id = $_GET["id"];
-                $row = findEvent( $id );
+                $row = findBusiness( $id );
 
                 // unserialize image urls, loop through array based on size and create slides
                 $images = unserialize( base64_decode( $row["imageurl"] ) );
@@ -158,7 +159,8 @@
                 $count = count($images);
                 for( $i = 0; $i < $count; $i++ )
                 {
-                  if($count > 1){
+                  if($count > 1)
+                  {
                     if( $i == 0 )
                     {
                         // create first active slide if theres more than one image
@@ -213,8 +215,8 @@
                                 <?php
                                     // find event id from URL and output information
                                     $id = $_GET["id"];
-                                    $row = findEvent( $id );
-                                    echo '<h4 style="font-size: 24px;">' . stripslashes($row["title"]) . '</h4>';
+                                    $row = findBusiness( $id );
+                                    echo '<h4 style="font-size: 24px;">' . stripslashes($row["businessname"]) . '</h4>';
                                     echo '<p style="font-size: 14px;">' . stripslashes($row["description"]) . '</p>';
                                 ?>
                             </div>
@@ -226,57 +228,34 @@
                      --><div id="text_64" class="fr-widget fr-text fr-wf fr_text_64">
                             <div class="fr-text">
                                 <?php
-                                    // formatting set for time
-                                    date_default_timezone_set('America/Los_Angeles');
-                                    $startDate = date('m-d-Y');
-                                    $endDate = date('m-t-Y');
-
-                                    // get event start date and time
-                                    $dateObjS = DateTime::createFromFormat('m-d-Y h:i A', $row["start_date_time"]);
-                                    $dateDisplayS = $dateObjS->format('F d, Y');
-                                    $dateDisplayST = $dateObjS->format('h:i A');
-
-                                    // get event end date and time
-                                    $dateObjE = DateTime::createFromFormat('m-d-Y h:i A', $row["end_date_time"]);
-                                    $dateDisplayE = $dateObjE->format('F d, Y');
-                                    $dateDisplayET = $dateObjE->format('h:i A');
-
-                                    // display detailed information for event
                                     echo '<h4 style="font-size: 24px;">Information</h4>';
 
-                                    // check for one day event
-                                    if( $dateDisplayE == $dateDisplayS )
+                                    // display wheel chair availability
+                                    echo "<b>Wheel Chair Accessible: </b>";
+                                    if( $row["Wchair"] == 1 )
                                     {
-                                        echo '<p style="font-size: 14px;"><b>Date: </b>' . $dateDisplayS . '<br>';
-
-                                        // check for unique end time
-                                        if( $dateDisplayST == $dateDisplayET )
-                                        {
-                                            echo '<b>Time: </b>' . $dateDisplayST;
-                                        }
-                                        else
-                                        {
-                                            echo '<b>Time: </b>' . $dateDisplayST . ' - ' . $dateDisplayET . '</p>';
-                                        }
+                                        echo 'Yes' . '<br>';   
                                     }
-                                    else{
-                                        echo '<p style="font-size: 14px;"><b>Date: </b>' . $dateDisplayS . ' - ' . $dateDisplayE . '<br>';
-                                        echo '<b>Time: </b>' . $dateDisplayST . ' - ' . $dateDisplayET . '</p>';
-                                    }
-
-                                    echo '<b>Where: </b>' . stripslashes($row["location"]) . '<br>';
-
-                                    if( $row["phone"] == NULL )
+                                    else
                                     {
-                                        $formattedPhone = formatPhoneNumber($row["phone"]);
-                                        echo '<h4 style="font-size: 18px;">For More Information: </h4>';
-                                        echo '<p style="font-size: 14px;">';
-                                        echo '<b>Phone: </b>' . $formattedPhone . '<br>';
-                                        echo '<b>Email: </b>' . $row["email"] . '<br>';
+                                        echo 'No' . '<br>';
                                     }
-                                    else{
-                                        echo '<p style="font-size: 14px;">For more information: <br>' . $row["email"] . '</p>';
+                                    // display wifi availability
+                                    echo "<b>Wifi: </b>";
+                                    if( $row["wifi"] == 1 )
+                                    {
+                                        echo 'Yes' . '<br>';   
                                     }
+                                    else
+                                    {
+                                        echo 'No' . '<br>';
+                                    }
+
+                                    $formattedPhone = formatPhoneNumber($row["phone"]);
+                                    echo '<h4 style="font-size: 18px;">For More Information: </h4>';
+                                    echo "<b>Phone: </b>" . $formattedPhone . '<br>';
+                                    echo "<b>Email: </b>" . stripslashes($row["email"]) . '<br>';
+                                    echo "<b>Website: </b>" . stripslashes($row["website"]) . '</p>';
                                 ?>
                             </div>
                         </div>

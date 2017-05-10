@@ -4,6 +4,8 @@
   if (!class_exists('S3'))require_once('s3_ex/S3.php');
 
   //AWS access info
+  if( !defined('awsAccessKey') ) define( 'awsAccessKey', 'AKIAI7V6KHRXIC6N4I2Q' );
+  if( !defined('awsSecretKey') ) define( 'awsSecretKey', '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' );
 
   //instantiate the class
   $s3 = new S3(awsAccessKey, awsSecretKey);
@@ -24,7 +26,7 @@
   $phone = addslashes("$_POST[phone]");
   $email = addslashes("$_POST[email]");
   $mytext = addslashes("$_POST[mytext]");
-  $approved = 0;
+  $approved = 1;
 
   // get all the image file names - if no file upload, store default images
   $numFiles = count( $_FILES['theFile']['name'] );
@@ -33,7 +35,7 @@
   {
     if( $_FILES['theFile']['error'][$i] !== UPLOAD_ERR_OK )
     {
-      $urls[$i] = addslashes("ilr-events.s3.amazonaws.com/ilr_default.png");
+      $urls[$i] = addslashes("ilr-events.s3.amazonaws.com/landscape-meadow-mountains.jpg");
     }
     else
     {
@@ -83,26 +85,23 @@
   foreach ( $_POST['tag'] as $key => $value )
   {
     $tag[$key] = $value;
-
-
   }
-      
-      $nonprofit=0;
+        $nonprofit=0;
       $fundraiser=0;
       $familyfriendly=0;
       $festival=0;
-      $cause=0;
+      $cause=1;
       $foodanddrink=0;
       $entertainment=0;
       $tedtalks=0;
-      $beauty=0;
+      $beauty=1;
       $health=0;
       $neighborhood=0;
-      $holiday=0;
+      $holiday=1;
       $grandopening=0;
       $laketahoe=0;
       $outdoor=0;
-      $sports=0;
+      $sports=1;
       $tradeshow=0;
       $happyhour=0;
       $foodtrucks=0;
@@ -153,31 +152,29 @@
           if( in_array( "crawl" , $tag ) )
       $crawl=1;
 
-
   // finally add the event into ilr_event DB
   $eventsID = addEvent( $title, $start_date_time, $end_date_time, $location, $description, $phone, $email, $mytext, $urls, $approved );
 
-  // finally add the tags to a related tag table record
-  addTags( $eventsID,
-          $nonprofit,
-          $fundraiser,
-          $familyfriendly,
-          $festival,
-          $cause,
-          $foodanddrink,
-          $entertainment,
-          $tedtalks,
-          $beauty,
-          $health,
-          $neighborhood,
-          $holiday,
-          $grandopening,
-          $laketahoe,
-          $outdoor,
-          $sports,
-          $tradeshow,
-          $happyhour,
-          $foodtrucks,
-          $education,
-          $crawl );
+addTags( $eventsID,
+      $nonprofit,
+      $fundraiser,
+      $familyfriendly,
+      $festival,
+      $cause,
+      $foodanddrink,
+      $entertainment,
+      $tedtalks,
+      $beauty,
+      $health,
+      $neighborhood,
+      $holiday,
+      $grandopening,
+      $laketahoe,
+      $outdoor,
+      $sports,
+      $tradeshow,
+      $happyhour,
+      $foodtrucks,
+      $education,
+      $crawl );
 ?>
